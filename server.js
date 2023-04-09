@@ -132,30 +132,41 @@ switch(answers.userChoice) {
   const updateEmployeeRole = () => {
     inquirer.prompt([
       {
-      message: 'Which employee do you want to update?',
+        message: 'What is the employees first name?',
+        type: 'input',
+        name: 'first_name'
+    },
+    {
+      message: 'What is the employees last name?',
+        type: 'input',
+        name: 'last_name'
+    },
+    {
+      message: 'What is the employees new role?',
       type: 'list',
-      name: 'employee_id',
+      name: 'role_id',
       choices: [
-       { name: 'John Doe', value: 1},
-      { name: 'Mike Chan', value: 2},
-      { name: 'Ashley Rodriguez', value: 3},
-      { name: 'Kevin Tupik', value: 4},
-      { name: 'Kunal Singh', value: 5},
-      { name: 'Malia Brown', value: 6},
-      { name: 'Sarah Lourd', value: 7},
-      { name: 'Tom Allen', value: 8},
-    ]
+        { name: 'Sales Lead', value: 1},
+        { name: 'Salesperson', value: 2},
+        { name: 'Lead Engineer', value: 3},
+        { name: 'Software Engineer', value: 4},
+        { name: 'Account Manager', value: 5},
+        { name: 'Accountant', value: 6},
+        { name: 'Legal Lead Team', value: 7},
+        { name: 'Lawyer', value: 8},
+      ]
     }
   ])
-    .then(employeeRole => {
-      console.log()
 
-      db.query('UPDATE employee SET ? WHERE ?', employeeRole, err => {
-        if(err) {console.log(err)}
-      })
-      console.log('Role updated!')
-      userQuestions()
-    }) 
+  .then(employee => {
+    console.log(employee)
+    const { first_name, last_name, role_id } = employee;
+    db.query('UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?', [role_id, first_name, last_name], err => {
+      if(err) {console.log(err)}
+    })
+    console.log('employee updated!')
+    userQuestions()
+  })
   };
 
   const viewAllRoles = () => {
